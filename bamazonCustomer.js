@@ -44,23 +44,23 @@ function postInventory() {
             inquirer
                 .prompt([{
                     name: "item",
-                    message: "What item would you like to purchase, select item by ID please?"
+                    message: "What item would you like to purchase, select item by ID?"
                 }]).then(function (ansItem) {
                     if (ansItem.item.toUpperCase() == "Q") {
                         connection.end();
-                    } else{
+                    } else {
                         inquirer
                             .prompt([{
                                 name: "qty",
                                 message: "how much would you like to buy?"
                             }]).then(function (ansQty) {
-                                console.log(ansItem.item);
-                                connection.query("SELECT * FROM bamazonInventory WHERE ?", { item_id: ansQty.qty }, function(err, results){
+                                // console.log(ansItem.item);
+                                connection.query("SELECT * FROM bamazonInventory WHERE ?", { item_id: ansItem.item }, function (err, results) {
                                     if (err) throw err;
-                                    console.log(results);
+                                    // console.log(results);
                                     if (results[0].stock_quantity > ansQty.qty) {
                                         var cost = results[0].price * ansQty.qty
-                                        console.log(cost,results[0].price)
+                                        // console.log(cost, results[0].price)
                                         console.log("Your ord has been placed. \nThe total cost is $" + cost.toFixed(2) + "\n Thank you for shopping Bamazon")
                                         start();
 
@@ -71,8 +71,8 @@ function postInventory() {
                                             item_id: ansItem.item
                                         }], function (err, response) { });
                                     } else {
-                                        console.log("Sorry we dont have enough stock of that item \nWe only have " + response[0].stock_quantity + "units of " + ansItem.item + ". \n Please retyr your order. \nTHank you")
-                                    start();
+                                        console.log("Sorry we dont have enough stock of that item \nWe only have " + response[0].stock_quantity + " units of  " + ansItem.item + ". \n Please retry your order. \nTHank you")
+                                        start();
                                     }
                                 });
                             });
