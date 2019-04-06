@@ -29,6 +29,8 @@ function start() {
         .then(function (answer) {
             if (answer.Home === "Shop") {
                 postInventory();
+            }else if(answer.Home === "Manageer"){
+                manager();
             }
             else {
                 connection.end();
@@ -44,7 +46,7 @@ function postInventory() {
             inquirer
                 .prompt([{
                     name: "item",
-                    message: "What item would you like to purchase, select item by ID?"
+                    message: "What item would you like to purchase, select item by ID?(type Q to quit)"
                 }]).then(function (ansItem) {
                     if (ansItem.item.toUpperCase() == "Q") {
                         connection.end();
@@ -61,7 +63,7 @@ function postInventory() {
                                     if (results[0].stock_quantity > ansQty.qty) {
                                         var cost = results[0].price * ansQty.qty
                                         // console.log(cost, results[0].price)
-                                        console.log("Your ord has been placed. \nThe total cost is $" + cost.toFixed(2) + "\n Thank you for shopping Bamazon")
+                                        console.log("Your order has been placed. \nThe total cost is $" + cost.toFixed(2) + "\n Thank you for shopping Bamazon")
                                         start();
 
                                         var newQty = results[0].stock_quantity - ansQty.qty
